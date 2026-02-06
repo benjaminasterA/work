@@ -12,15 +12,15 @@ model = ChatOpenAI(model="gpt-4o-mini")# 클래스->객체생성(1.데이터 저
 #print("model=>",model) # 객체생성=>메모리에 공간이 잡힌다.=>주소값(=집주소)
 
 # ~ 찾아서 보여줘=>찾는 양이 많아서 tokens max limited =>요약해줘 또는 몇 단어이내로 간결하게 알려줘
-prompt = ChatPromptTemplate.from_template(
-    "다음 한국어 문장을 영어로 번역하되,반드시 10단어 이내로 간결하게 답해줘.\n문장: {korean_text}"
-)
+prompt = ChatPromptTemplate.from_template("{input}")
 
 chain = prompt | model | StrOutputParser() #익명객체(=이름이 없는 객체)
 
+
 # result = chain.invoke({"topic":"랭체인"}) # [] ,{키명:전달할값} 오타=>json형식=>데이터 전송 #(1)
 user_input="오늘 날씨가 너무 좋아서 근처 공원에 산책을 가고 싶다."
-result = chain.invoke({"korean_text": user_input})#(2)
+result = chain.invoke({"input": user_input})#(2)
 
-print(f"입력:{user_input}")
+print(f"질문1:내이름은 테스트김이야 /응답:{chain.invoke({'input': '내이름은 테스트김이야'})}")
+print(f"질문2:오늘 날씨가 너무 좋아서 근처 공원에 산책을 가고 싶다. /응답:{chain.invoke({'input': '오늘 날씨가 너무 좋아서 근처 공원에 산책을 가고 싶다.'})}")
 print(f"결과:{result}")

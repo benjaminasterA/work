@@ -1,31 +1,28 @@
-import os
-import dotenv
+#모듈 불러오기 (형식) from 모듈명 import 클래스,함수->하나의 파일로 만들어서 세트(=모듈)
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate #대화
+from langchain_core.output_parsers import StrOutputParser #문자형태로 출력
 
+#apikey
+import dotenv #환경변수 =>블럭지정한 후 ctrl+/
+dotenv.load_dotenv()#모듈명.호출할 함수명(=직원) =>인증키
 
-dotenv.load_dotenv()
+#1.모델 설정(안정적인 gtp-4o-mini)
+model = ChatOpenAI(model="gpt-4o-mini")# 클래스->객체생성(1.데이터 저장,2.메서드호출)=>인증을 받은상태
+#print("model=>",model) # 객체생성=>메모리에 공간이 잡힌다.=>주소값(=집주소)
 
-model = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0
-)
-print("모델 정보=>", model)
-
-# 2. 프롬프트(Prompt) 정의
+# ~ 찾아서 보여줘=>찾는 양이 많아서 tokens max limited =>요약해줘 또는 몇 단어이내로 간결하게 알려줘
 prompt = ChatPromptTemplate.from_template(
-    "다음 한국어 문장을 영어로 번역하되, 반드시 10단어 이내로 간결하게 답해줘.\n문장: {korean_text}"
-
+    "다음 한국어 문장을 영어로 번역하되,반드시 10단어 이내로 간결하게 답해줘.\n문장: {korean_text}"
 )
-# 사용자 입력을 받을 템플릿을 생성하고 변수 'prompt'에 할당함
 
-# parser = StrOutputParser()->
+chain = prompt | model | StrOutputParser() #익명객체(=이름이 없는 객체)
 
-chain = prompt | model | StrOutputParser() # <-- 수정된 부분
-print("체인 정보=>", chain)
+# result = chain.invoke({"topic":"랭체인"}) # [] ,{키명:전달할값} 오타=>json형식=>데이터 전송 #(1)
+user_input="오늘 날씨가 너무 좋아서 근처 공원에 산책을 가고 싶다."
+result = chain.invoke({"korean_text": user_input})#(2)
 
-user_inputs = "오늘 날씨가 너무 좋아서 근처 공원에서 산책하고 싶다."
-result = chain.invoke({"korean_text": user_inputs})
-print("입력=>", user_inputs)
-print("번역 결과=>", result)
+print(f"입력:{user_input}")
+print(f"결과:{result}")
+
+

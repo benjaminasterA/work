@@ -1,28 +1,45 @@
-
+# (pip install langchain-openai)
+# LangChain의 핵심 모듈인 ChatOpenAI 라이브러리 임포트
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate #대화
-from langchain_core.output_parsers import StrOutputParser #문자형태로 출력
+# 프롬프트 구성을 위한 ChatPromptTemplate 클래스 임포트
+from langchain_core.prompts import ChatPromptTemplate
+# 출력 결과 정제를 위한 StrOutputParser 클래스 임포트
+from langchain_core.output_parsers import StrOutputParser
 
-#apikey
-import dotenv #환경변수 =>블럭지정한 후 ctrl+/
-dotenv.load_dotenv()#모듈명.호출할 함수명(=직원) =>인증키
+# 1. ChatPromptTemplate을 사용해 프롬프트(Prompt) 구조 설계
+# 시스템 메시지에는 챗봇의 성격과 답변 형식을 구체적으로 정의
+# 사용자 메시지에는 변수 {question}을 배치해 질문 전달
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "당신은 어려운 기술 개념을 요약, 중요성 설명, "
+               "그리고 쉬운 비유와 예시를 들어 설명하는 AI 선생님입니다. / "
+               "답변은 반드시 다음 형식을 따르세요: / "
+               "1. 정의, 2. 이유(중요성), 3. 쉬운 예시."),
+    ("user", "{question}")
+])
 
-#1.모델 설정(안정적인 gtp-4o-mini)
-model = ChatOpenAI(model="gpt-4o-mini",temperature=0.7)# 
+# 2. ChatOpenAI 모델 연결 및 설정
+# 모델명은 gpt-4o-mini, 창의성 지수(temperature)는 0.7로 설정
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0.7
+)
 
-chat_history="사용자:내이름은 '테스트김'야.\n AI: 반가워요 테스트님!" #미리 언급한 문장을 저장
+# 3. StrOutputParser를 사용하여 결과값을 문자열(String)로 변환
+parser = StrOutputParser()
 
-prompt = ChatPromptTemplate.from_template(
-    "system": {}
-    "user": {}
-    "AI"
-    "이전 대화:{history} \n 질문: {input}")
-chain = prompt | model | StrOutputParser() 
+# 4. LCEL(LangChain Expression Language) 문법으로 체인(Chain) 완성
+# 프롬프트 -> 언어 모델 -> 출력 파서 순서로 데이터 흐름 연결
+chain = prompt | llm | parser
 
-#과거 내역을 함꺼번에 보냄->이름을 물어보기 전에 누구인지 미리 전의 데이터값을 전달
-result = chain.invoke({"history":chat_history,"input": "내이름이 뭔지알아요?"})
-print(f"수동 메모리 응답:{result}")
+# 5. 체인 실행 및 결과 출력
+# invoke 메서드(method)를 사용하여 질문을 던지고 결과 확인
+# 공식 Python(파이썬) 도움말에 따르면 invoke는 입력을 받아 실행하는 표준 방식
+question_text = "REST API란?"
+response = chain.invoke({"question": question_text})
 
+# 최종 답변 출력
+print(f"질문:",question_text,"답변: \n", response)
+# print(f"답변: \n", response)
 
 
 

@@ -42,4 +42,3 @@ if st.button("요리 카드 제작 시작"):
     else:
         st.warning("메뉴 이름을 먼저 입력 해주세요!")
         
-

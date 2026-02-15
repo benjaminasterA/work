@@ -6,7 +6,7 @@ import whisper
 # whisper.load_model(위스퍼 로드 모델) 함수를 사용하여 'base' 크기의 모델 객체 생성
 # .to("cuda")(투 쿠다) 메서드로 GPU(지피유) 가속 연산을 활성화하여 처리 속도 향상
 # (NVIDIA GPU 환경이 아닐 경우 이 부분은 주석 처리하거나 제거해야 함)
-model = whisper.load_model("base").to("cuda") #cuda가 있는 경우 사용
+model = whisper.load_model("base") 
 
 # os.path.abspath(__file__)(오에스 패스 앱스패스)로 현재 실행 중인 파일의 절대 경로 획득
 # os.path.dirname(오에스 패스 디렉토리네임)으로 해당 파일이 포함된 폴더 경로 추출
@@ -20,6 +20,7 @@ print(audio_path)
 
 # model.transcribe(모델 트랜스크라이브) 메서드를 호출하여 오디오 파일을 텍스트로 변환
 # (내부 알고리즘이 음성을 분석하여 언어 데이터를 추출함)
+
 result = model.transcribe(audio_path)
 # 변환 결과 딕셔너리(Dictionary) 객체에서 'text' 키에 해당하는 데이터만 추출
 text = result["text"]

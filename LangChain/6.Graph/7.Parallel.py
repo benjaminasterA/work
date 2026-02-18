@@ -29,7 +29,7 @@ def cook_node(state: ChefState):
         "messages": ["제작부: 주문하신 요리를 완성했습니다."],
         "execution_path": ["제작부(Cook)"],  # 경로 기록
         "scores": [30],   # 조리 점수
-        "errors": []      # ⚠️ 수정: 항상 에러가 아니라 정상 처리도 가능하도록 빈 리스트 반환
+        "errors": []      # 수정: 항상 에러가 아니라 정상 처리도 가능하도록 빈 리스트 반환
     }
 
 def marketing_node(state: ChefState):
@@ -53,7 +53,7 @@ def reviewer_node(state: ChefState):
 def error_handler_node(state: ChefState):
     """[에러 처리부] 에러가 발생했을 때 처리하는 부서"""
     return {
-        "messages": ["⚠️ 시스템 알림: 에러가 발생하여 작업을 중단합니다."],
+        "messages": ["시스템 알림: 에러가 발생하여 작업을 중단합니다."],
         "execution_path": ["에러 처리(Error Handler)"],  # 에러 처리 경로 기록
         "scores": [0],    # 에러 처리 노드는 점수 없음
         "errors": state["errors"]  # 기존 에러 기록 전달
@@ -107,26 +107,26 @@ workflow.add_edge("error_handler", END)     # 에러 처리 → 종료
 app = workflow.compile()  # 실행 가능한 앱으로 컴파일
 
 # --- [5단계] Streamlit 출력 ---
-st.title("⚡ 병렬 처리 협업 시스템")
+st.title("병렬 처리 협업 시스템")
 if st.button("시스템 가동"):
-    # ⚠️ 수정: scores도 초기화해야 함
+    # 수정: scores도 초기화해야 함
     result = app.invoke({"messages": [], "execution_path": [], "scores": [], "errors": []})
 
-    st.subheader("📝 업무 기록")
+    st.subheader("업무 기록")
     for msg in result["messages"]:
         st.info(msg)
 
     if result["errors"]:
-        st.subheader("❌ 에러 로그")
+        st.subheader("에러 로그")
         for err in result["errors"]:
             st.error(err)
 
-    st.subheader("🗺️ 병렬 협업 로드맵")
+    st.subheader("병렬 협업 로드맵")
     path_img_data = draw_path_map(result["execution_path"], result["scores"])
     st.image(path_img_data)
 
     st.download_button(
-        label="📂 협업 로드맵 저장하기",
+        label="협업 로드맵 저장하기",
         data=path_img_data,
         file_name="collaboration_map.png",
         mime="image/png"

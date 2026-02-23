@@ -1,4 +1,4 @@
-#basicserver(1).py
+#basicserver_1.py
 
 #1.FastAPI 클래스를 가져온다.
 from fastapi import FastAPI #Fast API를 사용하게 해주는 클래스

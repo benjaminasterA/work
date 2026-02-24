@@ -1,0 +1,183 @@
+1일차(파이썬의 설치및 자료형,연산자)
+
+-----------------------------------------ex1.py
+print('환영합니다. python 세상!')
+
+환영합니다. python 세상!
+
+'''
+여러 줄 
+주석
+'''
+# 한 줄 주석
+var1 = '안녕 파이썬'
+print(var1)
+var1 = 5; print(var1)
+var1 = "변수 선언 시 type은 입력자료에 의해 결정"
+
+안녕 파이썬
+5
+
+a = 10   #참조 변수 - 객체의 주소를 기억  
+b = 20.5
+#b = 10   10을 저장하는 위치가 있다.
+c = b
+print(a, b, c)
+print('주소 출력 :', id(a), id(10), id(b), id(c)) # b와 c는 주소가 같다.
+
+10 20.5 20.5
+주소 출력 : 2296561363536 2296561363536 2296643726960 2296643726960
+                                                                  =====================
+print(a is b, a == b)  #주소 비교, 값 비교 (주소가 다르다.)
+print(b is c, b == c) #c에 b의 주소값을 저장했기에 주소값이 같다.
+d = 10
+print(a is d, a == d) #a와 d에 똑같이 10이 저장된 위치를 저장했기에 주소값이 같다.
+
+False False
+True True
+True True
+===================================ex2.py
+print('변수 선언시 대소문자 구분')
+A = 1; a = 2; print('A + a=', A + a, id(a), id(b))
+
+변수 선언시 대소문자 구분
+A + a= 3 2296561363280 2296643726960
+
+print('\n변수 선언 시 키워드를 사용하지 않는다.')
+import keyword   #키워드 목록을 읽기 위한 외부 모듈 읽기
+print('키워드 목록 :', keyword.kwlist)
+
+변수 선언 시 키워드를 사용하지 않는다.
+키워드 목록 : ['False', 'None', 'True', '__peg_parser__', 
+                   'and', 'as', 'assert', 'async', 'await', 'break', 
+                  'class', 'continue', 'def', 'del', 'elif', 'else', 'except',
+                  'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is',
+                   'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 
+                  'return', 'try', 'while', 'with', 'yield']
+
+print('\n숫자 진법')
+print(10, oct(10), hex(10), bin(10))
+print(10, 0o12, 0xa, 0b1010)
+
+숫자 진법
+10 0o12 0xa 0b1010
+10 10 10 10
+
+print('type(자료형) 확인')
+print(7, type(7))
+print(7.2 , type(7.2))
+print(3 + 4j, type(3 + 4j))
+print(True, type(True))
+print('a', type('a'))
+
+type(자료형) 확인
+7 <class 'int'>
+7.2 <class 'float'>
+(3+4j) <class 'complex'>
+True <class 'bool'>
+a <class 'str'>
+
+print((1,), type((1,)))#tuple
+print([1], type([1])) #list
+print({1}, type({1})) #set
+print({'key':1}, type({'key':1})) #dict
+
+(1,) <class 'tuple'>
+[1] <class 'list'>
+{1} <class 'set'>
+{'key': 1} <class 'dict'>
+
+=======================ex3_introduction.py 파일
+
+# 사용자 입력 받아서 자기소개 출력
+name = input("이름을 입력하세요: ")  # 문자열 입력
+age = int(input("나이를 입력하세요: "))  # 숫자 입력 후 int 변환
+print("안녕하세요, 제 이름은", name,"이고 나이는", age,"살입니다.")
+print("======================================================")
+print(f"안녕하세요, 제 이름은 {name} 이고 나이는  {age} 살입니다.")
+
+========================ex4_packing.py
+
+'''
+연산자
+'''
+v1 = 3           #치환
+v1 = v2 = v3 = 5
+print(v1, v2, v3)
+print('출력1', end=',')  #줄바꿈 대신 ,로 출력 이어가기 
+print('출력2')
+# shitf+ endtr로 실행시킨다.
+
+5 5 5
+출력1,출력2
+
+v1, v2 = 10, 20  #치환2
+print(v1, v2)#10,20
+v2, v1 = v1, v2  # 두개의 기억장소 참조 값 교환
+print(v1, v2)#20,10
+
+10 20
+20 10
+
+print('값 할당 packing')
+v1, *v2 = [1,2,3,4,5]
+print(v1)#1
+print(v2)#[2,3,4,5]
+print() #줄바꿈
+
+값 할당 packing
+1
+[2, 3, 4, 5]
+
+*v1, v2 = [1,2,3,4,5]
+print(v1)#[1,2,3,4]
+print(v2)# 5 맨마지막에 있는값을 v2에 대입
+print()
+
+[1, 2, 3, 4]
+5
+
+*v1, v2, v3 = [1,2,3,4,5]
+print(v1); print(v2); print(v3)
+#[1,2,3]     4           5
+
+[1, 2, 3]
+4
+5
+
+============================================================================
+
+ex4_format.py 파일 작성
+
+'''
+출력문->print()의 다양한 형식
+->숫자,문자
+'''
+print('\nprint 출력서식 연습')
+#System.out.printf("%f.3\n",변수명)
+#format(출력할값,서식)
+print(format(1.5678,'10.3f')) #     1.568
+#%d(정수),%s->문자열
+print('나는 나이가 %d 이다'%23)#%숫자 나는 나이가 23 이다
+print('나는 나이가 %s 이다'%'스물셋')#%문자 나는 나이가 스물셋 이다
+#나는 나이가 23이고 이름은 홍길동
+print('나는 나이가 %d이고,이름은 %s'%(23,'홍길동'))
+print('나는 나이가 %s이고,이름은 %s'%(23,'홍길동'))
+'''
+대입해서 들어갈 자료형이 맞지 않은 경우에 발생
+TypeError: %d format: a number is required, not str
+->%s (모든 자료형을 받아들일 수 있다.
+    숫자->문자형으로 형변환(str())
+    %d%%->숫자뒤에 %가 붙는다.
+'''
+#나는 키가 177.700000이고,공부열정은 100%이다
+print('나는 키가 %f이고,공부열정은 %d%%이다'%(177.7,100))
+print('나는 키가 %.2f이고,공부열정은 %d%%이다'%(177.7,100))
+#2.x 방식->3.x방식->format(),{0},{1}
+#이름은 김길수,나이는 25
+print('이름은 {0}, 나이는 {1}'.format('김길수',25))
+print('이름은 {}, 나이는 {}'.format('김길수',25))
+print('이름은 {1}, 나이는 {0}'.format(25,'김길수'))
+========================================================
+
+

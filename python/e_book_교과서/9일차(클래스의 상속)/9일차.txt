@@ -1,0 +1,94 @@
+p437 속성사용하기
+p438 self의 의미=>그림 참조
+p439 인스턴스를 만들때 값 받기
+           ㄴp440 그림 34-5 참조할것.
+
+p441 인스턴스를 생성한 뒤에 속성 추가 하기, 특정속성만 허용하기
+p448 클래스 속성과 인스턴스 속성 알아보기
+p450 인스턴스 속성 사용하기
+p452 정적메서드 사용하기  메서드명위에 @staticmethod 부여하면 가능
+
+       =>클래스명.정적메서드명(~)
+====================================
+class4_has.py파일 작성
+'''
+냉장고에 음식을 넣기-has 관계
+'''
+class Fridge:#주
+    #현재상태
+    isOpened=False
+    foods=[]#음식을 넣을 저장소(java ArrayList)
+
+    #냉장고 문 열기
+    def open(self):#매개변수 X
+        self.isOpened=True
+        print('냉장고 문을 열어놓음!!')
+    #음식을 넣기 ->자동으로 음식목록 보기
+    def put(self,thing):
+        if self.isOpened:# if(isOpened) true인경우 생략
+            self.foods.append(thing)
+            print('냉장고 속에 음식을 넣음!!')
+            self.list()#자기 클래스 내의 다른함수호출
+            #list() 클래스 밖의 함수를 호출할때 가능
+        else:#open()호출하기전인 상태
+            print('냉장고 문이 닫혀서 음식을 넣을수없음!!!')
+    #냉장고 닫기
+    def close(self):
+        self.isOpened=False
+        print('냉장고 묻을 닫아놓음!!!')
+    #냉장고의 내용을 출력(확인)
+    def list(self):
+        for f in self.foods:#['a','b',,,]
+            print('-',f.irum,f.expiry_date)
+        print()
+
+class FoodData:#부(음식이름,유통기한)
+    def __init__(self,irum,expiry_date):
+        self.irum=irum#동적으로 멤버변수추가
+        self.expiry_date=expiry_date
+
+fri=Fridge()
+print()
+apple=FoodData('사과','2023-08-14')
+fri.open()
+fri.put(apple)#=>fri.list()
+fri.close()
+print()
+
+cola=FoodData('콜라','2023-08-21')
+fri.open()
+fri.put(cola)
+fri.close()
+print('\n 음식물 확인')
+print(fri.foods)#FoodData저장 위치
+=============================================
+
+class5_is.py파일 작성
+
+'''
+상속->자원의 재활용성
+     동물(부)
+     개(자식) 말(자식2)
+'''
+class Animal:
+    eat='음식'#멤버변수에 초기값 설정 가능
+    def move(self):
+        print('움직이는 생물')
+        #리턴값이 없으면 기본적으로 None 전달
+# class Dog extends Animal (java)
+#파이썬에서는 다중상속이 가능(아버지,어머니)=>우선순위
+class Dog(Animal):# class 자식클래스명(부모클래스)
+    pass #{} 부모클래스가 가진 멤버변수,함수그대로 사용 O
+
+class Horse(Animal):
+    pass
+
+dog1=Dog()
+print(dog1.eat)#음식
+print(dog1.move())#움직이는 생물
+
+horse1=Horse()
+print(horse1.eat)#음식
+print(horse1.move())#움직이는 생물
+===========================================
+

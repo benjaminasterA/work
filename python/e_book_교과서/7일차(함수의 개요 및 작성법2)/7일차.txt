@@ -1,0 +1,247 @@
+func4.py파일 작성
+
+'''
+함수명을 호출->인수
+만약에 매개변수값을 전달받지 않으면
+->디폴트 매개변수를 설정
+'''
+'''
+함수명을 호출->인수
+만약에 매개변수값을 전달받지 않으면
+->디폴트 매개변수를 설정
+'''
+#1. 함수선언시 초기값을 부여할 수있다.
+def ShowGugudan(start,end=5):
+    #range(2,4)->(2,3)
+    for dan in range(start,end+1):
+        print(str(dan)+'단 출력')
+        for i in range(1,10):#(1,2,,,,9)
+            print(str(dan)+"*"+str(i)+\
+                  "="+str(dan*i),end=' ')
+        print()
+
+ShowGugudan(2,3)
+print('=='*20)
+ShowGugudan(3)#3,4,5
+print('=='*20)
+
+#2.함수호출할때 변수를 이용해서 전달
+#매개변수명=전달할값
+ShowGugudan(start=6,end=8)
+print('=='*20)
+#3.매개변수명=전달할값의 순서를 변경해도 된다.
+ShowGugudan(end=4,start=3)
+print()
+#4.매개변수중에서 원하는 것만 변수명=값
+ShowGugudan(5,end=6)
+#4의 주의할점
+print()
+#ShowGugudan(start=2,3)
+#첫번째는 매개변수명,두번째는 상수 불가
+
+print('\n가변 인수 처리')
+def Func1(*ar):#* (매개변수 갯수X,list,set,tuple)
+    print(ar)
+    #입력받은 데이터값을 하나씩 변수에 담아출력
+    for i in ar:
+        print('food:'+i)
+
+Func1('ham','egg','spam')
+'''
+가변 인수 처리
+('ham', 'egg', 'spam')
+food:ham
+food:egg
+food:spam
+'''
+#주의할점
+print('=='*10)
+def Func2(a,*ar):
+#TypeError: Func2() missing 1 required keyword-only argument: 'a'
+#가변인수는 뒤에 추가해야 한다.(앞에 올 수 없다)
+#def Func2(*ar,a):
+    print(a)
+    print(ar)
+    for i in ar:
+        print('food:'+i)
+
+Func2('ham','egg','spam')
+'''
+ham
+('egg', 'spam')
+food:egg
+food:spam
+
+'''
+print() #줄바꿈
+#앞의 매개변수에 따라서 뒤의 값을 +,*해주는
+#함수를 작성
+def SelProcess(choice,*ar):
+    if choice=='sum':
+        re=0
+        for i in ar:
+            re+=i
+    elif choice=='mul':
+        re=1
+        for i in ar:
+            re*=i
+    return re
+
+print(SelProcess('sum',100,90,70))#260
+print(SelProcess('mul',100,90,78))#702000
+====================================================
+func5.py파일 작성
+
+'''
+함수의 매개변수전달2(*,**)
+'''
+print('\ndict타입의 자료형')
+def Func3(w,h,**other):
+    print('몸무게 {},키 {}'.format(w,h))
+    print(other)#dic형의 값 출력
+
+#입력할때에는 매개변수명=값,매개변수2=값
+Func3(65,175,irum='홍길동',nai=23,sex='남',addr='대전')
+#Func3(65,175,{'irum':'홍길동2','nai':23})
+#TypeError: Func3() takes 2 positional arguments but 3 were given
+Func3(75,185,irum='김길수')
+'''
+dict타입의 자료형
+몸무게 65,키 175
+{'irum': '홍길동', 'nai': 23, 'sex': '남', 'addr': '대전'}
+몸무게 75,키 185
+{'irum': '김길수'}
+'''
+print('\n종합')
+#앞의 2개(매개변수)3->list형태,4->dict형태
+def Func4(a,b,*v1,**v2):
+    print(a)
+    print(b)
+    print(v1) #()
+    print(v2) #{}
+
+Func4(1,2)
+Func4(1,2,3,4,5)
+Func4(1,2,3,4,5,m=6,n=7)
+'''
+1
+2
+()
+{}
+1
+2
+(3, 4, 5)->*v1
+{'m': 6, 'n': 7}->**v2
+'''
+============================================
+func6.py파일 작성
+
+
+'''
+함수내부의 변수값을 계속해서 참조하고 싶을때
+(계속해서 불러다 사용하고싶을때)
+->한번 불러오고 끝이 아니라 계속해서 누적해서
+값을 불러오고 싶다.
+'''
+def out():
+    count=0
+    def inn():
+        #nonlocal키워드를 사용해서 변수선언
+        nonlocal count  #부모함수의 count=0을 가리킨다.
+        count+=1
+        return count
+    print(inn())
+
+#print(count) 함수밖에서 함수안의 count 참조 불가
+#NameError: name 'count' is not defined
+out() #1
+ #UnboundLocalError: local variable 'count' 
+ #referenced before assignment       
+out() #1->새로 함수를 호출->초기화(1)
+print()
+
+def outer():
+    count=0
+    def inner():
+        #nonlocal키워드를 사용해서 변수선언
+        nonlocal count 
+        count+=1
+        return count
+    #print(inner())
+    return inner #내부함수를 반환->클로저
+    #return 내부함수명
+
+add1=outer()
+print('add1()=>',add1()) #내부함수명을 리턴->add1()
+print('add1()=>',add1())
+print('add1()=>',add1())
+print('add1()=>',add1())
+
+#새로운 객체가 되기때문에 처음부터 다시 초기화
+add2=outer()
+print('add2()=>',add2())#1
+
+print('수량*단가 세금 결과 출력')
+def outer2(tax):
+    def inner2(su,dan):
+        amount=su*dan*tax
+        return amount
+    return inner2 #내부 함수를 리턴=>클로저 함수
+
+r=outer2(0.1)#세율 0.1
+re=r(3,25000)#r->inner2를 가리킨다. 수량3,단가 25000전달
+print('re=',re)#re= 7500.0
+
+r2=outer2(0.05)#세율 0.05
+re2=r2(1,50000)
+print('re2=',re2)#re2= 2500.0
+#closure->함수형 언어에만 있다
+#파이썬, 자바스크립트
+=========================================
+func7.py파일 작성
+
+#익명함수->함수의 이름이 없는 함수
+print('축약함수(Lambda-이름이 없는 한줄짜리')
+#형식 lambda 인자 : 표현식(구문)(값1,값2,,,)
+def Hap(x,y):
+    return x+y
+
+print(Hap(3,4))#7
+print()
+print('람다로 표현하면')
+print((lambda x,y:x+y)(3,4))#7
+print('\n람다도 가변인수 부여 가능')
+#kbs=함수의 주소값(치환)
+kbs=lambda a,su=10:a+su
+print(kbs(5))#15
+print(kbs(5,6))#11
+#su=10라는것은 두번째인수가 없을때 디폴트부여
+sbs=lambda a,*tu,**di:print(a,tu,di)
+sbs(1,2,3,m=4,n=5)
+#1 (2, 3) {'m': 4, 'n': 5}
+
+print('\n다른함수에서 람다 사용하기')
+#filter(함수,시컨스 자료형)
+print(list(range(10)))#[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+#전체 0~9까지에서 조건에 만족하는 데이터
+#리스트로 만들어서 출력
+print(list(filter(lambda a:a<5,range(10))))#[0, 1, 2, 3, 4]
+print(list(filter(lambda a:a%2,range(10))))#[1, 3, 5, 7, 9]
+#false만 출력->1,3,5,7,9
+
+#재귀함수->자기가 자기자신을 호출
+print('\n재귀함수')
+def fsum(n):
+    if n==1: return 1
+    return n+fsum(n-1)
+
+print(fsum(10))#55->10+9+8+...1=55
+
+def CountDown(n):
+    if n==0:
+        print('완료')
+    else:
+        print(n,end=' ')
+        CountDown(n-1)
+CountDown(5)#5 4 3 2 1 완료
+=======================================

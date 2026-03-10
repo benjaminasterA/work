@@ -1,0 +1,209 @@
+class5_is.py파일 작성
+'''
+상속의 장점=>1.부모의 멤버변수와 메서드를  상속받으므로 새로 작성할 필요가 없다.(소스코드 절약)
+           2.재사용성 활용      
+'''
+
+class Person:
+    name = ''
+    age = 17
+
+    def greeting(self):
+        print('안녕하세요')
+
+class Student(Person):
+    def study(self):
+        print('열심히 공부하기')
+    #오버라이딩 ->부모로부터 상속받은 메서드의 내용을 자식클래스에 맞게 내용을 수정하는것.
+    #추가 코딩
+    def greeting(self):
+        print('반갑습니다. 제임스라고 합니다.')
+
+james = Student()
+james.name = '제임스'
+print(james.name,james.age)# 제임스 17
+james.greeting()#안녕하세요 =>반갑습니다. 제임스라고 합니다.
+james.study()#열심히 공부하기
+
+
+
+
+다중상속
+class6_inheritnace.py파일 작성
+
+'''
+상속의 장점=>1.부모의 멤버변수와 메서드를  상속받으므로 새로 작성할 필요가 없다.(소스코드 절약)
+           2.재사용성 활용      
+'''
+
+class Person:
+    name = ''
+    age = 17
+
+    def greeting(self):
+        print('안녕하세요')
+
+#추가
+class University:
+    def manage_credit(self):
+        print('학점관리')  
+    #추가
+    def greeting(self):
+        print('반가워요')   
+
+#class Student(Person,University): # 안녕하세요
+class Student(University,Person): # 반가워요
+    def study(self):
+        print('열심히 공부하기')
+    
+
+james = Student()
+james.name = '제임스'
+print(james.name,james.age)# 제임스 17
+james.greeting()#안녕하세요? =>다중상속에서 동일한 메서드가 있을시 먼저 상속받은 클래스에 우선순위가 있다.
+james.study()#열심히 공부하기
+james.manage_credit()#학점 관리
+=============================================================================
+
+
+filetest1.py파일 작성
+
+'''
+파일을 생성->파일의 내용저장->불러오기->file io
+'''
+
+import os
+
+try:
+    #파일의 경로->\을 인식->r
+    #파일객체=open('경로포함파일명','모드') #모드생략->읽기전용
+    #f=open(r'C:\python\pythonproject\pythonsource\ex11_file')
+    #추가
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    print('current_dir=>',current_dir)#current_dir=> c:\workAI\work\Python\9.file
+
+    # 2. 운영체제에 맞는 구분자( \ 또는 / )를 사용하여 안전하게 경로를 합칩니다.
+    # os.path.join(기본경로, 추가경로1, 추가경로2...): 폴더명과 파일명을 합쳐 하나의 경로로 만듭니다.
+    text_path = os.path.join(current_dir, "ftest.txt")
+    print('text_path=>',text_path)
+    #f=open(os.getcwd()+r'\ftest.txt')
+    f=open(text_path)
+    print(f)#파일객체출력
+    '''
+    <_io.TextIOWrapper name='c:\\workAI\\work\\Python\\9.file\\ftest.txt' mode='r' encoding='cp949'>
+    '''
+    print(f.read())
+    f.close()#메모리 해제
+    #f.close()->파이썬도 가비지겔렉션이 있다.
+    #파일저장
+    text_path2 = os.path.join(current_dir, "ftest2.txt")
+    letter=open(text_path2,mode='w')
+    #ascii파일로 저장(순수파일)
+    letter.write('My friend2!')
+    letter.write('file Testing!!')
+    letter.close()
+    print()#줄바꿈
+
+    f2=open(text_path2)
+    print(f2.read())#여러줄 읽어들일때 사용
+    #print(f2.readline())#한줄 읽을때 사용
+    f2.close()
+    print()
+    f=open(text_path)
+    #3줄을 한줄씩 읽어들여서 출력
+    for a in range(3):#0,1,2
+        line=f.readline()
+        print(line)
+    f.close()
+    #파일의 일부분만 읽기
+    print('부분행 읽기-슬라이싱')
+    f = open(text_path)
+    lines=f.readlines()#list타입으로 읽기
+    print(lines)
+    #['My friend!\n', 'Have a good time!\n', 'hello~']
+    print()
+    import sys
+    #sys.stdout(출력객체)->writelines(행수)
+    sys.stdout.writelines(lines[:2])#2행(0,1)
+    print('=='*10)
+    sys.stdout.writelines(lines[1:4])#1,2,3행
+    f.close()
+    #파일 목록 보기(경로,특정한 파일지정)
+    print('\n파일 목록보기')
+    import glob
+    import os.path
+
+    #files=glob.glob('*')#모든 파일의 경로
+    files=glob.glob('*.txt') #txt파일만
+    #files=glob.glob('?????.txt')5자리파일명 가져올때 ?
+    for k in files:
+        print(k)
+        #폴더가 존재한다면
+        if os.path.isdir(k):
+            print('end')
+
+except Exception as e:
+    print('파일처리에러',e)
+==============================================
+
+filetest2.py파일 작성
+
+'''
+파일에 복합객체(리스트,셋,튜플,클래스,,)
+
+'''
+import os
+
+try:
+    #파일객체명=open(경로파일명,모드,encoding정보)
+    #with open(경로파일명,모드,encoding정보) as 파일객체명
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    text_path = os.path.join(current_dir, "ftest3.txt")
+
+    #with open('ftest3.txt',mode='w',encoding='utf-8') as f:
+    with open(text_path,mode='w',encoding='utf-8') as f:
+        f.write('파이썬 파일 연습중')
+        f.write('\n파이썬 파일쓰기1')
+        f.write('\n파이썬 읽기연습')
+        f.write('\n파이썬 한글연습')
+        #f.close()->암묵적으로 실행(자동)
+    with open(text_path, mode='r', encoding='utf-8') as f2:
+        print(f2.read())
+    print('\n파일명(복합객체처리)')
+    #임의의객체를 파일로저장->pickle파일이용(ObjectOutputStream)
+    import pickle
+    #binary형태로 저장(wb)
+    pickle_path = os.path.join(current_dir, "test.pickle")
+    with open(pickle_path,'wb') as f3:
+        phones={'tom':'111-1111','길동':'222-2333'}
+        li=['마우스','키보드']
+        t=(phones,li)#여러종류의 객체가 모아놓은객체(=복합객체)
+        #dump(출려대상객체명,파일객체)
+        pickle.dump(t,f3)
+        pickle.dump(li,f3)#list객체만 따로 저장할시
+    #이진파일 불러오기(pickle)
+
+    with open(pickle_path,'rb') as f4:
+        a,b=pickle.load(f4)#load(파일객체명)
+        #a->t,b->li
+        c=pickle.load(f4)
+        print(a)#t
+        print(b)#li
+        print(c)#li만
+        
+    print('\n 작업중인 클래스 저장?')
+    class Hello:
+        irum='tom'
+    h=Hello()
+    h.mesg='Hi!'#동적으로 멤버변수 추가
+    pickle_path2 = os.path.join(current_dir, "test2.pickle")
+    with open(pickle_path2,'wb') as f5:
+        pickle.dump(h,f5)#파일저장
+
+    with open(pickle_path2,'rb') as f5:
+        h1=pickle.load(f5)
+    print(h1.irum,h1.mesg)#tom,Hi
+
+except Exception as e:
+    print('실행에러=>',e)
+=====================================
